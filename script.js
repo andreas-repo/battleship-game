@@ -6,6 +6,7 @@ let guesses = 0;
 let gameover = false;
 let fleet;
 
+
 class Battleship {
     constructor(positionA, positionB, positionC) {
         this.positionA = positionA;
@@ -127,39 +128,53 @@ class View {
     };
 }
 
-function convert() {
+function convertAndCheckCharacters() {
+    let textElement = document.getElementById("messageArea");
+    textElement.innerText = null;
     guess = guess.toUpperCase();
-    switch (guess.charAt(0)) {
-        case 'A':
-            guess = "0" + guess.substring(1);
-            break;
-        case 'B':
-            guess = "1" + guess.substring(1);
-            break;
-        case 'C':
-            guess = "2" + guess.substring(1);
-            break;
-        case 'D':
-            guess = "3" + guess.substring(1);
-            break;
-        case 'E':
-            guess = "4" + guess.substring(1);
-            break;
-        case 'F':
-            guess = "5" + guess.substring(1);
-            break;
-        case 'G':
-            guess = "6" + guess.substring(1);
-            break;
-        default:
-            let textElement = document.getElementById("messageArea");
-            textElement.innerText = "You can only choose A - G!"
-            guess = null;
-            break;
+    if (guess.length > 2) {
+        let textElement = document.getElementById("messageArea");
+        textElement.innerText = "Input is to long!"
+        guess = null;
+    } else if (guess.substring(1) >= 0 && guess.substring(1) < 7) {
+        switch (guess.charAt(0)) {
+            case 'A':
+                guess = "0" + guess.substring(1);
+                break;
+            case 'B':
+                guess = "1" + guess.substring(1);
+                break;
+            case 'C':
+                guess = "2" + guess.substring(1);
+                break;
+            case 'D':
+                guess = "3" + guess.substring(1);
+                break;
+            case 'E':
+                guess = "4" + guess.substring(1);
+                break;
+            case 'F':
+                guess = "5" + guess.substring(1);
+                break;
+            case 'G':
+                guess = "6" + guess.substring(1);
+                break;
+            default:
+                let textElement = document.getElementById("messageArea");
+                textElement.innerText = "Only A, B, C, D, E, F or G are correct inputs for the first character!"
+                guess = null;
+                break;
+        }
+    } else {
+        let textElement = document.getElementById("messageArea");
+        textElement.innerText = "Only numbers between 0 and 6 are correct inputs for the second character!"
+        guess = null;
     }
+
 }
 
 function shoot(guess) {
+
 
 }
 
@@ -167,24 +182,17 @@ function handleFireButton() {
     let guessInput = document.getElementById("guessInput");
     guess = guessInput.value;
     console.log(fleet);
-    convert(guess);
+    convertAndCheckCharacters(guess);
     if(guess != null) {
         console.log(guess);
-        //shoot(guess);
+        shoot(guess);
     }
-
-
-
-
-
 
 }
 
 function init() {
     fleet = createBattleships(2);
-
 }
-
 
 
 window.onload = init;
