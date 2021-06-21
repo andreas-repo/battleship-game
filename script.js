@@ -129,12 +129,12 @@ class View {
 }
 
 function convertAndCheckCharacters() {
+    let view = new View();
     let textElement = document.getElementById("messageArea");
     textElement.innerText = null;
     guess = guess.toUpperCase();
     if (guess.length > 2) {
-        let textElement = document.getElementById("messageArea");
-        textElement.innerText = "Input is to long!"
+        view.displayMessage("Input is to long!");
         guess = null;
     } else if (guess.substring(1) >= 0 && guess.substring(1) < 7) {
         switch (guess.charAt(0)) {
@@ -160,38 +160,118 @@ function convertAndCheckCharacters() {
                 guess = "6" + guess.substring(1);
                 break;
             default:
-                let textElement = document.getElementById("messageArea");
-                textElement.innerText = "Only A, B, C, D, E, F or G are correct inputs for the first character!"
+                view.displayMessage("Only A, B, C, D, E, F or G are correct inputs for the first character!");
                 guess = null;
                 break;
         }
     } else {
-        let textElement = document.getElementById("messageArea");
-        textElement.innerText = "Only numbers between 0 and 6 are correct inputs for the second character!"
+        view.displayMessage("Only numbers between 0 and 6 are correct inputs for the second character!");
         guess = null;
     }
-
-}
-
-function shoot(guess) {
-
 
 }
 
 function handleFireButton() {
     let guessInput = document.getElementById("guessInput");
     guess = guessInput.value;
-    console.log(fleet);
     convertAndCheckCharacters(guess);
     if(guess != null) {
-        console.log(guess);
         shoot(guess);
+
+        if (checkGameOver()) {
+            alert(`GAME OVER! YOU WON! ${hits} hits and ${guesses} guesses.`)
+            resetBoard();
+            fleet = createBattleships(2);
+            console.log(fleet);
+        }
+    }
+}
+
+function shoot(guess) {
+    let view = new View();
+
+    if (checkIfAlreadyShot(guess)) {
+        view.displayMessage("You already shot at this position!");
+        guess = null;
+    } else {
+        for (let i = 0; i <= fleet.length -1; i++) {
+            let battleShip = fleet[i];
+            if (battleShip.positionA == guess) {
+                hits++;
+                guesses++;
+                view.displayHit(guess);
+            } else if (battleShip.positionB == guess) {
+                hits++
+                guesses++;
+                view.displayHit(guess);
+            } else if (battleShip.positionC == guess) {
+                hits++;
+                guesses++;
+                view.displayHit(guess);
+            }
+        }
     }
 
+    let position1 = document.getElementById(guess);
+    if (position1.getAttribute("class") === null) {
+        guesses++;
+        let view = new View();
+        view.displayMiss(guess);
+    }
+}
+
+
+function checkIfAlreadyShot(guess) {
+    let element = document.getElementById(guess);
+    if (element.getAttribute("class") != null) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+//todo
+function checkIfPositionIsHit(position) {
+    let element = document.getElementById(position);
+    if (element.getAttribute("class") != null) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function checkGameOver() {
+    let gameover = false;
+    let count = 0;
+
+    for (let i = 0; i < fleet.length; i++) {
+        let battleShip = fleet[i];
+        if (checkIfPositionIsHit(battleShip.positionA) && checkIfPositionIsHit(battleShip.positionB) && checkIfPositionIsHit(battleShip.positionC)) {
+            count++;
+        }
+    }
+
+    if (count === fleet.length) {
+        return true;
+    } else {
+        return false;
+    }
+}
+//TODO end
+
+function resetBoard() {
+    for (let i = 0; i < 7; i++) {
+        for (let x = 0; x < 7; x++) {
+            let id = String(i) + String(x);
+            let element = document.getElementById(id);
+            element.setAttribute("class", null);
+        }
+    }
 }
 
 function init() {
     fleet = createBattleships(2);
+    console.log(fleet);
 }
 
 
