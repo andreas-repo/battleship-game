@@ -5,6 +5,7 @@ let hits = 0;
 let guesses = 0;
 let gameover = false;
 let fleet;
+let wins = 0;
 
 
 class Battleship {
@@ -130,8 +131,7 @@ class View {
 
 function convertAndCheckCharacters() {
     let view = new View();
-    let textElement = document.getElementById("messageArea");
-    textElement.innerText = null;
+    view.displayMessage(null);
     guess = guess.toUpperCase();
     if (guess.length > 2) {
         view.displayMessage("Input is to long!");
@@ -168,19 +168,19 @@ function convertAndCheckCharacters() {
         view.displayMessage("Only numbers between 0 and 6 are correct inputs for the second character!");
         guess = null;
     }
-
 }
 
 function handleFireButton() {
     let guessInput = document.getElementById("guessInput");
     guess = guessInput.value;
     convertAndCheckCharacters(guess);
+
     if(guess != null) {
         shoot(guess);
-
         if (checkGameOver()) {
             alert(`GAME OVER! YOU WON! ${hits} hits and ${guesses} guesses.`)
             resetBoard();
+            wins++;
             fleet = createBattleships(2);
             console.log(fleet);
         }
@@ -190,7 +190,7 @@ function handleFireButton() {
 function shoot(guess) {
     let view = new View();
 
-    if (checkIfAlreadyShot(guess)) {
+    if (checkIfPositionGotAlreadyHit(guess)) {
         view.displayMessage("You already shot at this position!");
         guess = null;
     } else {
@@ -231,9 +231,9 @@ function checkIfAlreadyShot(guess) {
 }
 
 //todo
-function checkIfPositionIsHit(position) {
+function checkIfPositionGotAlreadyHit(position) {
     let element = document.getElementById(position);
-    if (element.getAttribute("class") != null) {
+    if (element.getAttribute("class") == "hit" || element.getAttribute("class") == "miss") {
         return true;
     } else {
         return false;
@@ -246,7 +246,7 @@ function checkGameOver() {
 
     for (let i = 0; i < fleet.length; i++) {
         let battleShip = fleet[i];
-        if (checkIfPositionIsHit(battleShip.positionA) && checkIfPositionIsHit(battleShip.positionB) && checkIfPositionIsHit(battleShip.positionC)) {
+        if (checkIfPositionGotAlreadyHit(battleShip.positionA) && checkIfPositionGotAlreadyHit(battleShip.positionB) && checkIfPositionGotAlreadyHit(battleShip.positionC)) {
             count++;
         }
     }
@@ -257,7 +257,7 @@ function checkGameOver() {
         return false;
     }
 }
-//TODO end
+
 
 function resetBoard() {
     for (let i = 0; i < 7; i++) {
