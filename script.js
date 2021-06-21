@@ -182,7 +182,7 @@ function handleFireButton() {
             resetBoard();
             wins++;
             fleet = createBattleships(2);
-            console.log(fleet);
+            //console.log(fleet);
         }
     }
 }
@@ -271,7 +271,7 @@ function resetBoard() {
 
 function init() {
     fleet = createBattleships(2);
-    console.log(fleet);
+    //console.log(fleet);
 }
 
 
