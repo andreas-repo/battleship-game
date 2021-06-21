@@ -7,7 +7,6 @@ let gameover = false;
 let fleet;
 let wins = 0;
 
-
 class Battleship {
     constructor(positionA, positionB, positionC) {
         this.positionA = positionA;
@@ -17,19 +16,6 @@ class Battleship {
 }
 
 function createBattleships(amount) {
-    /*
-        let positionY = Math.floor(Math.random() * 4) + 1;
-        //TODO fix dead zone 00;
-        let positionX = Math.floor(Math.random() * 4) + 1;
-        //TODO add function to avoid same positions in the fleet
-         let coordinates1 = String(positionY) + String(positionX);
-        positionX = Number(positionX + 1);
-        let coordinates2 = String(positionY) + String(positionX);
-        positionX = Number(positionX + 1);
-        let coordinates3 = String(positionY) + String(positionX);
-
-        //let battleship = new Battleship(Number(coordinates1), Number(coordinates2), Number(coordinates3));
-    */
     let fleet = [];
 
     for (let i = 0; i < amount; i++) {
@@ -220,17 +206,6 @@ function shoot(guess) {
     }
 }
 
-
-function checkIfAlreadyShot(guess) {
-    let element = document.getElementById(guess);
-    if (element.getAttribute("class") != null) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-//todo
 function checkIfPositionGotAlreadyHit(position) {
     let element = document.getElementById(position);
     if (element.getAttribute("class") == "hit" || element.getAttribute("class") == "miss") {
@@ -258,7 +233,6 @@ function checkGameOver() {
     }
 }
 
-
 function resetBoard() {
     for (let i = 0; i < 7; i++) {
         for (let x = 0; x < 7; x++) {
@@ -273,7 +247,6 @@ function init() {
     fleet = createBattleships(2);
     //console.log(fleet);
 }
-
 
 window.onload = init;
 
